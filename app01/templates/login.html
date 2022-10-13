@@ -1,0 +1,56 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="x-ua-compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>用户登录-移动科技PC</title>
+    <link rel="stylesheet" href="{% static 'plugins/bootstrap-3.4.1/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/login.css' %}">
+</head>
+<body>
+<video id="v1" autoplay="autoplay" loop class="fullwidth" muted="muted" >
+    <source src="{% static 'video/Clouds - 64759.mp4' %}" type="video/mp4"/>
+</video>
+
+<script type="text/javascript">
+    var video = document.getElementById('v1');
+    video.playbackRate = 1.0;
+</script>
+
+<div class="account">
+    <h2>用户登录</h2>
+    <form method="post" novalidate>
+        {% csrf_token %}
+        <div class="form-group">
+            <label>用户名</label>
+            {{ form.username }}
+            <span style="color:red;">{{ form.username.errors.0 }}</span>
+        </div>
+
+        <div class="form-group">
+            <label >密码</label>
+            {{ form.password }}
+            <span style="color:red;">{{ form.password.errors.0 }}</span>
+        </div>
+
+        <div class="form-group">
+            <label for="id_code">图片验证码</label>
+            <div class="row">
+                <div class="col-xs-7">
+                    {{ form.code }}
+                    <span style="color:red;">{{ form.code.errors.0 }}</span>
+                </div>
+                <div class="col-xs-5">
+                    <img id="image_code" src="/image/code/" style="width: 125px;">
+                </div>
+            </div>
+        </div>
+
+        <input type="submit" value="登录" class="btn btn-primary">
+        <a href="index.html" id ="zc" class="btn btn-primary">注册</a>
+    </form>
+</div>
+</body>
+</html>

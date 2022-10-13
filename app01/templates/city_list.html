@@ -1,0 +1,130 @@
+{% extends 'layout.html' %}
+
+{% block content  %}
+    <div class="panel panel-default">
+              <div class="panel-heading" >
+
+                <div style="margin-bottom: 10px">
+                    <a class="btn btn-success" href="/city/add/" target="_blank">
+                        <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
+                        新建城市
+                    </a>
+                    </div>
+
+                  <div style="float: right;width: 300px;">
+                            <form method="get">
+                                <div class="input-group">
+                                    <input type="text" name="q" class="form-control" placeholder="Search for..." value="{{ search_data }}">
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-default" type="submit">
+                                            <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                            </form>
+                        </div>
+
+<div class="panel panel-default">
+      <!-- Default panel contents -->
+      <div class="panel-heading">
+          <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
+          城市列表
+      </div>
+
+      <!-- Table -->
+      <table class="table table-bordered" >
+        <thead>
+          <tr>
+              <th>ID</th>
+              <th>Logo</th>
+              <th>名称</th>
+              <th>人口</th>
+              <th>操作</th>
+          </tr>
+        </thead>
+        <tbody>
+        {% for obj in queryset %}
+          <tr>
+            <td>{{ obj.id }}</td>
+            <td>
+                <img src="/media/{{ obj.img }}" style="height: 120px;width: 150px" id="Img">
+            </td>
+            <td>{{ obj.name }}</td>
+            <td>{{ obj.count }}</td>
+            <td>
+                <a class="btn btn-primary btn-xs" href="/city/{{ obj.id }}/edit/">编辑</a>
+                <a class="btn btn-danger btn-xs" href="/city/{{ obj.id }}/delete/">删除</a>
+            </td>
+            </tr>
+         {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+            <div id="outerdiv" style="position:fixed;top:0;left:0;background:rgba(0,0,0,0.7);z-index:2;width:100%;height:100%;display:none;">
+               <div id="innerdiv" style="position:absolute;">
+                   <img id="bigimg" style="border:5px solid #fff;" src="" />
+               </div>
+            </div>
+
+            </div>
+            <ul class="pagination" style="margin-left:189.5px">
+                    {{ page_string }}
+             </ul>
+           </div>
+
+{% endblock %}
+
+{% block js %}
+    <script type="text/javascript">
+                    $(function() {
+                    bindImgEvent();
+                })
+
+             function bindImgEvent(){
+             $("#Img").click(function(){
+                    var _this = $(this);//将当前的pimg元素作为_this传入函数
+                    imgShow("#outerdiv", "#innerdiv", "#bigimg", _this);
+        });
+    });
+
+            function imgShow(outerdiv, innerdiv, bigimg, _this) {
+                var src = _this.attr("src");//获取当前点击的pimg元素中的src属性
+                $(bigimg).attr("src", src);//设置#bigimg元素的src属性
+
+                /*获取当前点击图片的真实大小，并显示弹出层及大图*/
+                $("<img/>").attr("src", src).load(function () {
+                    var windowW = $(window).width();//获取当前窗口宽度
+                    var windowH = $(window).height();//获取当前窗口高度
+                    var realWidth = this.width;//获取图片真实宽度
+                    var realHeight = this.height;//获取图片真实高度
+                    var imgWidth, imgHeight;
+                    var scale = 0.8;//缩放尺寸，当图片真实宽度和高度大于窗口宽度和高度时进行缩放
+
+                    if (realHeight > windowH * scale) {//判断图片高度
+                        imgHeight = windowH * scale;//如大于窗口高度，图片高度进行缩放
+                        imgWidth = imgHeight / realHeight * realWidth;//等比例缩放宽度
+                        if (imgWidth > windowW * scale) {//如宽度扔大于窗口宽度
+                            imgWidth = windowW * scale;//再对宽度进行缩放
+                        }
+                    } else if (realWidth > windowW * scale) {//如图片高度合适，判断图片宽度
+                        imgWidth = windowW * scale;//如大于窗口宽度，图片宽度进行缩放
+                        imgHeight = imgWidth / realWidth * realHeight;//等比例缩放高度
+                    } else {//如果图片真实高度和宽度都符合要求，高宽不变
+                        imgWidth = realWidth;
+                        imgHeight = realHeight;
+                    }
+                    $(bigimg).css("width", imgWidth);//以最终的宽度对图片缩放
+
+                    var w = (windowW - imgWidth) / 2;//计算图片与窗口左边距
+                    var h = (windowH - imgHeight) / 2;//计算图片与窗口上边距
+                    $(innerdiv).css({ "top": h, "left": w });//设置#innerdiv的top和left属性
+                    $(outerdiv).fadeIn("fast");//淡入显示#outerdiv及.pimg
+                });
+
+                $(outerdiv).click(function () {//再次点击淡出消失弹出层
+                    $(this).fadeOut("fast");
+                });
+            }
+    </script>
+{% endblock %}

@@ -1,0 +1,86 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>用户登录-移动科技PC</title>
+    <link rel="stylesheet" href="{% static 'plugins/bootstrap-3.4.1/css/bootstrap.min.css' %}">
+    <style>
+        .account{
+            width: 400px;
+            border: 1px solid #dddddd;
+            border-radius: 5px;
+            box-shadow: 5px 5px 20px #aaa;
+
+            margin-left: auto;
+            margin-right: auto;
+            margin-top: 100px;
+            padding: 20px 40px;
+        }
+
+        .account h2 {
+            margin-top: 10px;
+            text-align: center;
+        }
+
+        .fullwidth{
+            position: fixed;
+            right: 0px;
+            bottom: 0px;
+            min-width: 100%;
+            min-height: 100%;
+            height: auto;
+            width: auto;
+            /*width: 100%;
+            /*filter: blur(15px);*/
+            /*-webkit-filter: grayscale(100%);*/
+            /**filter: grayscale(100%);*/
+            z-index: -11;
+            /*top: 0;*/
+        }
+        source{
+            min-width: 100%;
+            min-height: 100%;
+            height: auto;
+            width: auto;
+        }
+
+    </style>
+</head>
+<body>
+<video id="v1" autoplay="autoplay" loop class="fullwidth" muted="muted" >
+    <source src="{% static 'video/Clouds - 64759.mp4' %}" type="video/mp4"/>
+</video>
+
+<script type="text/javascript">
+    var video = document.getElementById('v1');
+    video.playbackRate = 1.0;
+</script>
+
+<div class="account">
+    <h2>用户登录</h2>
+    <form method="post" novalidate>
+        {% csrf_token %}
+        <div class="form-group">
+            <label>用户名</label>
+            {{ form.username }}
+            <span style="color:red;">{{ form.username.errors.0 }}</span>
+        </div>
+
+        <div class="form-group">
+            <label >密码</label>
+            {{ form.password }}
+            <span style="color:red;">{{ form.password.errors.0 }}</span>
+        </div>
+
+        <div class="form-group">
+            <label >确认密码</label>
+            {{ form.password }}
+            <span style="color:red;">{{ form.password.errors.0 }}</span>
+        </div>
+
+        <input type="submit" value="返回" class="btn btn-primary" href="">
+    </form>
+</div>
+</body>
+</html>
